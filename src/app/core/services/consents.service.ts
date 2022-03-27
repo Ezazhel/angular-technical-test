@@ -1,9 +1,18 @@
 import { Injectable } from '@angular/core';
 import { ConsentInterface } from '@core/models/consents/consentInterface';
 import { UserConsent } from '@core/models/consents/user-consent';
-@Injectable()
+import { BehaviorSubject, Observable } from 'rxjs';
+@Injectable({
+  providedIn: 'root',
+})
 export class ConsentService {
-  public postedConsent: Array<UserConsent> = [];
+  private _postedConsent: BehaviorSubject<UserConsent[]> = new BehaviorSubject<
+    UserConsent[]
+  >([]);
+
+  public postedConsent$: Observable<UserConsent[]> =
+    this._postedConsent.asObservable();
+  public postedConsent: UserConsent[] = [];
 
   public getConsentList(): Array<ConsentInterface> {
     return [
@@ -17,11 +26,9 @@ export class ConsentService {
     ];
   }
 
-  public postConsentList(userConsent: UserConsent): void {
+  public postConsentList(userConsent: UserConsent): boolean {
     this.postedConsent.push(userConsent);
-  }
-
-  public getPostedConsent(): Array<UserConsent> {
-    return this.postedConsent;
+    this._postedConsent.next(Object.assign([], this.postedConsent));
+    return true;
   }
 }

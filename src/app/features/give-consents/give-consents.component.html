@@ -10,7 +10,7 @@
         formControlName="name"
         required
       />
-      <mat-error *ngIf="name.invalid">Name is required</mat-error>
+      <mat-error *ngIf="name.invalid && name.dirty">Name is required</mat-error>
     </mat-form-field>
     <mat-form-field appearance="standard">
       <mat-label>Email</mat-label>
@@ -22,7 +22,9 @@
         required
         formControlName="email"
       />
-      <mat-error *ngIf="email.invalid">Email is required</mat-error>
+      <mat-error *ngIf="email.invalid && email.dirty"
+        >Email is required</mat-error
+      >
     </mat-form-field>
     <div formArrayName="consents">
       I Agree to :
@@ -38,4 +40,5 @@
     </div>
     <button mat-raised-button [disabled]="!canSubmit()">Give consent</button>
   </form>
+  <span>{{ result }}</span>
 </section>
