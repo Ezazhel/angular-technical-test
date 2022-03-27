@@ -13,7 +13,7 @@ const routes: Routes = [
     path: 'consents',
     loadChildren: () =>
       import('./features/consents/consents.module').then(
-        (m) => m.ConsentModule
+        (m) => m.ConsentsModule
       ),
   },
 ];
