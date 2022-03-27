@@ -1,4 +1,4 @@
-import { ConsentInterface } from './consentInterface';
+import { ConsentInterface } from './consent-interface';
 
 export interface UserConsent {
   name: string;

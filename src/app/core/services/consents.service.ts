@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ConsentInterface } from '@core/models/consents/consentInterface';
+import { ConsentInterface } from '@core/models/consents/consent-interface';
 import { UserConsent } from '@core/models/consents/user-consent';
 import { BehaviorSubject, Observable } from 'rxjs';
 @Injectable({

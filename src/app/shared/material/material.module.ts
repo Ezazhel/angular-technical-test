@@ -11,6 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatListModule } from '@angular/material/list';
 const Material = [
   MatTableModule,
   MatToolbarModule,
@@ -22,6 +23,7 @@ const Material = [
   MatCheckboxModule,
   MatInputModule,
   MatPaginatorModule,
+  MatListModule,
 ];
 
 @NgModule({

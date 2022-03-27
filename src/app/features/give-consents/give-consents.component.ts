@@ -5,8 +5,9 @@ import {
   FormControl,
   FormGroup,
   FormGroupDirective,
+  Validators,
 } from '@angular/forms';
-import { ConsentInterface } from '../../core/models/consents/consentInterface';
+import { ConsentInterface } from '../../core/models/consents/consent-interface';
 import { ConsentService } from '../../core/services/consents.service';
 
 @Component({
@@ -19,12 +20,24 @@ export class GiveConsentsComponent implements OnInit {
   public formGroupDirective!: FormGroupDirective;
 
   public form: FormGroup = this.formBuilder.group({
-    name: [''],
-    email: [''],
+    name: ['', Validators.required],
+    email: ['', Validators.required],
     consents: this.formBuilder.array([]),
   });
   public consentList: ConsentInterface[] = [];
   public result: string = '';
+
+  get consents(): FormArray {
+    return this.form.get('consents') as FormArray;
+  }
+
+  get name(): FormArray {
+    return this.form.get('name') as FormArray;
+  }
+
+  get email(): FormArray {
+    return this.form.get('email') as FormArray;
+  }
 
   constructor(
     private formBuilder: FormBuilder,
@@ -33,6 +46,25 @@ export class GiveConsentsComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
+  }
+
+  submit() {
+    const { value } = this.form;
+    if (
+      this.consentService.postConsentList({
+        email: value?.email,
+        name: value?.name,
+        consents: value
+          ?.consents!.filter((consent: ConsentInterface) => consent.checked)
+          .map((consent: ConsentInterface) => consent.name)
+          .join(', '),
+      })
+    ) {
+      this.result = 'Consents sent with success';
+      this.resetForm();
+    } else {
+      this.result = "Your consents couldn't be sent";
+    }
   }
 
   private initForm() {
@@ -54,37 +86,12 @@ export class GiveConsentsComponent implements OnInit {
     const selectedConsents: Array<ConsentInterface> =
       value?.consents!.filter((consent: ConsentInterface) => consent.checked) ||
       [];
-    return selectedConsents.length > 0;
+    return selectedConsents.length > 0 && this.name.valid && this.email.valid;
   }
 
-  get consents(): FormArray {
-    return this.form.get('consents') as FormArray;
-  }
-
-  get name(): FormArray {
-    return this.form.get('name') as FormArray;
-  }
-
-  get email(): FormArray {
-    return this.form.get('email') as FormArray;
-  }
-  submit() {
-    const { value } = this.form;
-    if (
-      this.consentService.postConsentList({
-        email: value?.email,
-        name: value?.name,
-        consents: value
-          ?.consents!.filter((consent: ConsentInterface) => consent.checked)
-          .map((consent: ConsentInterface) => consent.name)
-          .join(', '),
-      })
-    ) {
-      this.result = 'Consents sent with success';
-      this.formGroupDirective.resetForm();
-      this.consents.clear();
-      this.initForm();
-      debugger;
-    }
+  private resetForm() {
+    this.formGroupDirective.resetForm();
+    this.consents.clear();
+    this.initForm();
   }
 }
