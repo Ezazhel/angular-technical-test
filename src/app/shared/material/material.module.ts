@@ -4,7 +4,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 
 const Material = [
@@ -19,6 +19,7 @@ const Material = [
 @NgModule({
   declarations: [],
   imports: [CommonModule, ...Material],
+  providers: [MatIconRegistry],
   exports: Material,
 })
 export class MaterialModule {}
