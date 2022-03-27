@@ -6,6 +6,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 const Material = [
   MatTableModule,
@@ -14,6 +15,7 @@ const Material = [
   MatButtonModule,
   MatIconModule,
   MatDividerModule,
+  MatFormFieldModule,
 ];
 
 @NgModule({
