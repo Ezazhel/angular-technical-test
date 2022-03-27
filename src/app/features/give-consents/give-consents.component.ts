@@ -1,21 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { ConsentInterface } from '../../core/models/consents/consentInterface';
+import { ConsentService } from '../../core/services/consents.service';
 
-interface ConsentInterface {
-  name: string;
-  value: string;
-  checked: boolean;
-}
-
-const CONSENT_LIST: Array<ConsentInterface> = [
-  { name: 'Receive newsletter', value: 'newsletter', checked: false },
-  { name: 'Be shown targeted ads', value: 'ads', checked: false },
-  {
-    name: 'Contribute to anonymous visit statistics',
-    value: 'stats',
-    checked: false,
-  },
-];
 @Component({
   selector: 'app-give-consents',
   templateUrl: './give-consents.component.html',
@@ -28,18 +15,18 @@ export class GiveConsentsComponent implements OnInit {
     consents: this.formBuilder.array([]),
   });
   public consentList: ConsentInterface[] = [];
-  constructor(private formBuilder: FormBuilder) {}
 
-  submit() {
-    console.log(this.form.value);
-  }
+  constructor(
+    private formBuilder: FormBuilder,
+    private consentService: ConsentService
+  ) {}
 
   ngOnInit(): void {
     this.initForm();
   }
 
   private initForm() {
-    this.consentList = CONSENT_LIST;
+    this.consentList = this.consentService.getConsentList();
     this.consentList.forEach((consent) => {
       this.consents.push(
         new FormGroup({
@@ -50,6 +37,7 @@ export class GiveConsentsComponent implements OnInit {
       );
     });
   }
+
   canSubmit(): boolean {
     const { value } = this.form;
     const selectedConsents: Array<ConsentInterface> =
@@ -60,5 +48,25 @@ export class GiveConsentsComponent implements OnInit {
 
   get consents(): FormArray {
     return this.form.get('consents') as FormArray;
+  }
+
+  get name(): FormArray {
+    return this.form.get('name') as FormArray;
+  }
+
+  get email(): FormArray {
+    return this.form.get('email') as FormArray;
+  }
+
+  submit() {
+    const { value } = this.form.value;
+    console.log(this.form.value);
+    this.consentService.postConsentList({
+      email: value?.email,
+      name: value?.name,
+      consents: value?.consents!.filter(
+        (consent: ConsentInterface) => consent.checked
+      ),
+    });
   }
 }
