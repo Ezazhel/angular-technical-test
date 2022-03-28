@@ -11,14 +11,14 @@ import { GiveConsentsComponent } from './give-consents.component';
 describe('GiveConsentsComponent', () => {
   let fakeConsentService: Pick<
     ConsentService,
-    'postConsentList' | 'getSubscribableConsent'
+    'postUserConsents' | 'getSubscribableConsent'
   >;
   let component: GiveConsentsComponent;
   let fixture: ComponentFixture<GiveConsentsComponent>;
 
   beforeEach(async () => {
     fakeConsentService = {
-      postConsentList: () => {
+      postUserConsents: () => {
         return true;
       },
       getSubscribableConsent: () => [
@@ -36,7 +36,7 @@ describe('GiveConsentsComponent', () => {
       ],
     };
 
-    spyOn(fakeConsentService, 'postConsentList').and.callThrough();
+    spyOn(fakeConsentService, 'postUserConsents').and.callThrough();
     spyOn(fakeConsentService, 'getSubscribableConsent').and.callThrough();
 
     await TestBed.configureTestingModule({
@@ -74,6 +74,6 @@ describe('GiveConsentsComponent', () => {
 
   it('should submit form and navigate to /consents', () => {
     component.submit();
-    expect(fakeConsentService.postConsentList).toHaveBeenCalled();
+    expect(fakeConsentService.postUserConsents).toHaveBeenCalled();
   });
 });

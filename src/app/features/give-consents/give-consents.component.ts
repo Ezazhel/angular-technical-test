@@ -49,7 +49,7 @@ export class GiveConsentsComponent implements OnInit {
   submit() {
     const { value } = this.form;
     if (
-      this.consentService.postConsentList({
+      this.consentService.postUserConsents({
         email: value?.email,
         username: value?.name,
         consentsType: value

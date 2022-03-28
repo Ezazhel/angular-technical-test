@@ -8,7 +8,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { ConsentsComponent } from './consents.component';
 
 describe('ConsentsComponent', () => {
-  let fakeConsentService: Pick<ConsentService, 'getUserConsents'>;
+  let fakeConsentService: Pick<ConsentService, 'getUsersConsents'>;
   let component: ConsentsComponent;
   let fixture: ComponentFixture<ConsentsComponent>;
   let postedConsent$: BehaviorSubject<UserConsent[]>;
@@ -21,7 +21,7 @@ describe('ConsentsComponent', () => {
       },
     ]);
     fakeConsentService = jasmine.createSpyObj('ConsentService', {
-      getUserConsents: postedConsent$,
+      getUsersConsents: postedConsent$,
     });
 
     await TestBed.configureTestingModule({
@@ -48,7 +48,7 @@ describe('ConsentsComponent', () => {
   });
 
   it('should get userConsents from service and dataSource populate', () => {
-    expect(fakeConsentService.getUserConsents).toHaveBeenCalled();
+    expect(fakeConsentService.getUsersConsents).toHaveBeenCalled();
     expect(component.dataSource.data.length).toBeGreaterThanOrEqual(1);
   });
 });

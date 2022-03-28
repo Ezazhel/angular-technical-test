@@ -11,13 +11,13 @@ import { PostConsentDto } from '../models/consents/post-consent-dto';
   providedIn: 'root',
 })
 export class ConsentService {
-  public postedConsent: UserConsent[] = this.seed();
-  private _postedConsent: BehaviorSubject<UserConsent[]> = new BehaviorSubject<
+  public usersConsents: UserConsent[] = this.seed();
+  private _usersConsents: BehaviorSubject<UserConsent[]> = new BehaviorSubject<
     UserConsent[]
-  >(Object.assign([], this.postedConsent));
+  >(Object.assign([], this.usersConsents));
 
-  private postedConsent$: Observable<UserConsent[]> =
-    this._postedConsent.asObservable();
+  private usersConsents$: Observable<UserConsent[]> =
+    this._usersConsents.asObservable();
 
   public getSubscribableConsent(): Array<ConsentInterface> {
     return [
@@ -35,18 +35,18 @@ export class ConsentService {
     ];
   }
 
-  public getUserConsents(): Observable<UserConsent[]> {
-    return this.postedConsent$;
+  public getUsersConsents(): Observable<UserConsent[]> {
+    return this.usersConsents$;
   }
 
-  public postConsentList(postConsentDto: PostConsentDto): boolean {
+  public postUserConsents(postConsentDto: PostConsentDto): boolean {
     const userConsent = new UserConsent(
       postConsentDto.username,
       postConsentDto.email,
       this.createConsentsFromConsentType(postConsentDto.consentsType)
     );
-    this.postedConsent.push(userConsent);
-    this._postedConsent.next(Object.assign([], this.postedConsent));
+    this.usersConsents.push(userConsent);
+    this._usersConsents.next(Object.assign([], this.usersConsents));
     return true;
   }
 
