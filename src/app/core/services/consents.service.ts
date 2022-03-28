@@ -16,7 +16,7 @@ export class ConsentService {
     UserConsent[]
   >(Object.assign([], this.postedConsent));
 
-  public postedConsent$: Observable<UserConsent[]> =
+  private postedConsent$: Observable<UserConsent[]> =
     this._postedConsent.asObservable();
 
   public getSubscribableConsent(): Array<ConsentInterface> {
@@ -33,6 +33,10 @@ export class ConsentService {
         checked: false,
       },
     ];
+  }
+
+  public getUserConsents(): Observable<UserConsent[]> {
+    return this.postedConsent$;
   }
 
   public postConsentList(postConsentDto: PostConsentDto): boolean {

@@ -11,11 +11,23 @@
 </mat-toolbar>
 <mat-sidenav-container>
   <mat-sidenav #sidenav class="mat-elevation-z8">
-    <a routerLink="/give-consents" mat-button class="menu-button">
+    <a
+      routerLink="/give-consents"
+      mat-button
+      class="menu-button"
+      data-testid="goto-give-consents"
+    >
       Give Consents
     </a>
 
-    <a routerLink="/consents" mat-button class="menu-button"> Consents </a>
+    <a
+      routerLink="/consents"
+      mat-button
+      class="menu-button"
+      data-testid="goto-consents"
+    >
+      Consents
+    </a>
   </mat-sidenav>
   <mat-sidenav-content>
     <div class="content mat-elevation-z8">

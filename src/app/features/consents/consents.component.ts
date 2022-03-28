@@ -20,7 +20,7 @@ export class ConsentsComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.consentService.postedConsent$.subscribe((consents) => {
+    this.consentService.getUserConsents().subscribe((consents) => {
       this.dataSource.data = consents;
     });
   }
