@@ -21,7 +21,12 @@
       required
       formControlName="email"
     />
-    <mat-error *ngIf="email.invalid">Email is required</mat-error>
+    <mat-error *ngIf="email.invalid && email.errors!['required']">
+      Email is required
+    </mat-error>
+    <mat-error *ngIf="email.invalid && email.errors!['email']">
+      Email should be an email
+    </mat-error>
   </mat-form-field>
   <div formArrayName="consents" class="consents">
     <p>I Agree to :</p>

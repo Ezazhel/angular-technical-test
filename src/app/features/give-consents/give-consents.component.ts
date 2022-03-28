@@ -1,14 +1,14 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
   FormControl,
   FormGroup,
-  FormGroupDirective,
   Validators,
 } from '@angular/forms';
-import { ConsentInterface } from '../../core/models/consents/consent-interface';
-import { ConsentService } from '../../core/services/consents.service';
+import { Router } from '@angular/router';
+import { ConsentInterface } from '@core/models/consents/consent-interface';
+import { ConsentService } from '@core/services/consents.service';
 
 @Component({
   selector: 'app-give-consents',
@@ -16,12 +16,9 @@ import { ConsentService } from '../../core/services/consents.service';
   styleUrls: ['./give-consents.component.scss'],
 })
 export class GiveConsentsComponent implements OnInit {
-  @ViewChild(FormGroupDirective)
-  public formGroupDirective!: FormGroupDirective;
-
   public form: FormGroup = this.formBuilder.group({
     name: ['', Validators.required],
-    email: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
     consents: this.formBuilder.array([]),
   });
   public consentList: ConsentInterface[] = [];
@@ -40,6 +37,7 @@ export class GiveConsentsComponent implements OnInit {
   }
 
   constructor(
+    private location: Router,
     private formBuilder: FormBuilder,
     private consentService: ConsentService
   ) {}
@@ -53,15 +51,13 @@ export class GiveConsentsComponent implements OnInit {
     if (
       this.consentService.postConsentList({
         email: value?.email,
-        name: value?.name,
-        consents: value
+        username: value?.name,
+        consentsType: value
           ?.consents!.filter((consent: ConsentInterface) => consent.checked)
-          .map((consent: ConsentInterface) => consent.name)
-          .join(', '),
+          .map((consent: ConsentInterface) => consent.value),
       })
     ) {
-      this.result = 'Consents sent with success';
-      this.resetForm();
+      this.location.navigate(['/consents']);
     } else {
       this.result = "Your consents couldn't be sent";
     }
@@ -69,7 +65,7 @@ export class GiveConsentsComponent implements OnInit {
 
   private initForm() {
     this.consents.clear();
-    this.consentList = this.consentService.getConsentList();
+    this.consentList = this.consentService.getSubscribableConsent();
     this.consentList.forEach((consent) => {
       this.consents.push(
         new FormGroup({
@@ -87,11 +83,5 @@ export class GiveConsentsComponent implements OnInit {
       value?.consents!.filter((consent: ConsentInterface) => consent.checked) ||
       [];
     return selectedConsents.length > 0 && this.name.valid && this.email.valid;
-  }
-
-  private resetForm() {
-    this.formGroupDirective.resetForm();
-    this.consents.clear();
-    this.initForm();
   }
 }
